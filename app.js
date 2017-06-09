@@ -6,16 +6,16 @@
 
     function getName(){
      var response = JSON.parse(this.responseText);
-     console.log(this.responseText); //typeof is a string
-     console.log(response); //data parsed into readable text (JSON Object)
-     console.log(response.name);
+     //console.log(this.responseText);
+     //console.log(response);
+     //console.log(response.name);
 
      var name = document.getElementById('person4Name');
-     name.innerHTML = response.name; //JSON Object back to text
+     name.innerHTML = response.name;
   }
    function findName(id){
     oReq.addEventListener('load', getName);
-    oReq.open('GET', `http://www.swapi.co/api/people/${id}`); //person 4 is Darth Vader
+    oReq.open('GET', `http://www.swapi.co/api/people/${id}`);
     oReq.send();
   }
   findName(4);
@@ -25,7 +25,7 @@
     function getPlanet(){
       var response = JSON.parse(this.responseText);
 
-     var name = document.getElementById('person4HomeWorld');
+      var name = document.getElementById('person4HomeWorld');
       name.innerHTML = response.name;
    }
      function findPlanet(id){
@@ -56,7 +56,7 @@
     function getSpecies(){
       var response = JSON.parse(this.responseText);
 
-     var name = document.getElementById('person14Species');
+      var name = document.getElementById('person14Species');
       name.innerHTML = response.name;
    }
      function findSpecies(id){
@@ -68,19 +68,35 @@
 
    //This is instruction 8
 
-   var oReq5 = new XMLHttpRequest();
+   var titles = new XMLHttpRequest();
 
-    function getFilms(){
-     var response = JSON.parse(this.responseText);
+   function buildList(){
+    var response = JSON.parse(this.responseText);
+    console.log('***this is response = ',response);
+    console.log('***this is a response.title = ',response.title);
 
-     var name = document.getElementById('person14Name');
-     name.innerHTML = response.name;
+     //this the getPlanets function
+     function getPlanets(){
+      var planets = JSON.parse(this.responseText);
+      console.log('***this is planets.name = ',planets.name);
+     }
+
+     //for loop to pull the url of the planets
+      console.log('***this is response.planets (url) = ',response.planets);
+      for (var i = 0; i < response.planets.length; i++){
+        var planets = new XMLHttpRequest();
+        planets.addEventListener('load', getPlanets);
+        planets.open('GET', response.planets[i]);
+        console.log('***this is response.planets[i] = ', response.planets[i]);
+        planets.send();
+     }
+   }
+
+   function getData1(id){
+    titles.addEventListener('load', buildList );
+    titles.open('GET', `http://swapi.co/api/films/${id}`);
+    titles.send();
   }
-   function findFilms(id){
-    oReq5.addEventListener('load', getFilms);
-    oReq5.open('GET', `http://www.swapi.co/api/people/${id}`);
-    oReq5.send();
-  }
-  findFilms(14);
+  getData1(1);
 
  })();
