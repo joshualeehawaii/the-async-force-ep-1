@@ -68,35 +68,82 @@
 
    //This is instruction 8
 
-   var titles = new XMLHttpRequest();
-
-   function buildList(){
-    var response = JSON.parse(this.responseText);
-    console.log('***this is response = ',response);
-    console.log('***this is a response.title = ',response.title);
+   // function buildList(){
+    // var response = JSON.parse(this.responseText);
+    // console.log('***this is response = ',response);
+    // console.log('***this is a response.title = ',response.title);
 
      //this the getPlanets function
-     function getPlanets(){
-      var planets = JSON.parse(this.responseText);
-      console.log('***this is planets.name = ',planets.name);
-     }
+     // function getPlanets(){
+      // var planets = JSON.parse(this.responseText);
+      // console.log('***this is planets.name = ',planets.name);
+     // }
 
      //for loop to pull the url of the planets
-      console.log('***this is response.planets (url) = ',response.planets);
-      for (var i = 0; i < response.planets.length; i++){
-        var planets = new XMLHttpRequest();
-        planets.addEventListener('load', getPlanets);
-        planets.open('GET', response.planets[i]);
-        console.log('***this is response.planets[i] = ', response.planets[i]);
-        planets.send();
+      // console.log('***this is response.planets (url) = ',response.planets);
+      // for (var i = 0; i < response.planets.length; i++){
+        // var planets = new XMLHttpRequest();
+        // planets.addEventListener('load', getPlanets);
+        // planets.open('GET', response.planets[i]);
+        // console.log('***this is response.planets[i] = ', response.planets[i]);
+        // planets.send();
+     // }
+   // }
+
+
+
+   function getData(method, url, callback){
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener('load', getTitles );
+      xhr.open(method, url, callback);
+      xhr.send();
+    }
+    getData('GET', 'http://swapi.co/api/films', getTitles);
+
+
+    function getTitles(){
+     var films = JSON.parse(this.responseText);
+     console.log('*** all the films =  ',films);
+     console.log('*** all the film objects =  ',films.results);
+     console.log('*** Object title @ 0 =  ',films.results[0].title);
+     for (i = 0; i < films.results.length; i++){
+      console.log('*** this is the title =  ', films.results[i].title);
+
      }
-   }
+    }
 
-   function getData1(id){
-    titles.addEventListener('load', buildList );
-    titles.open('GET', `http://swapi.co/api/films/${id}`);
-    titles.send();
+
+
+
+
+
+
+
+
+  })();
+
+
+/*function xhr(method, url, callback) {
+  var request = new XMLHttpRequest();
+  request.addEventListener('load', callback);
+  request.open(method, url)
+  request.send()
+}
+
+
+xhr('GET', 'http://swapi.co/api/films', getFilms)
+
+function getFilms() {
+  var films = this.responseText;
+  for (var i = 0; i < films.length) {
+    xhr('GET', 'aosfdhpasiodfhaf${films.whatever}', getIndividualFilm)
   }
-  getData1(1);
+}
 
- })();
+
+getIndividualFilm() {
+  indivdiual film = this.responseText
+}
+
+*/
+
