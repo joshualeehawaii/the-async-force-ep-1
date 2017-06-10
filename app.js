@@ -2,17 +2,18 @@
   console.log('sanity check');
 
   //This is instruction 6
-   var oReq = new XMLHttpRequest();
+  var oReq = new XMLHttpRequest();
 
-    function getName(){
-     var response = JSON.parse(this.responseText);
-     //console.log(this.responseText);
-     //console.log(response);
-     //console.log(response.name);
+  function getName(){
+   var response = JSON.parse(this.responseText);
+   //console.log(this.responseText);
+   //console.log(response);
+   //console.log(response.name);
 
-     var name = document.getElementById('person4Name');
-     name.innerHTML = response.name;
+   var name = document.getElementById('person4Name');
+   name.innerHTML = response.name;
   }
+
    function findName(id){
     oReq.addEventListener('load', getName);
     oReq.open('GET', `http://www.swapi.co/api/people/${id}`);
@@ -21,26 +22,24 @@
 
   var oReq2 = new XMLHttpRequest();
 
-    function getPlanet(){
-      var response = JSON.parse(this.responseText);
-
-      var name = document.getElementById('person4HomeWorld');
+  function getPlanet(){
+    var response = JSON.parse(this.responseText);
+    var name = document.getElementById('person4HomeWorld');
       name.innerHTML = response.name;
    }
-     function findPlanet(id){
-      oReq2.addEventListener('load', getPlanet);
-      oReq2.open('GET', `http://swapi.co/api/planets/${id}`);
-      oReq2.send();
+  function findPlanet(id){
+    oReq2.addEventListener('load', getPlanet);
+    oReq2.open('GET', `http://swapi.co/api/planets/${id}`);
+    oReq2.send();
    }
 
    //This is instruction 7
    var oReq3 = new XMLHttpRequest();
 
-    function getNewName(){
-     var response = JSON.parse(this.responseText);
-
-     var name = document.getElementById('person14Name');
-     name.innerHTML = response.name;
+  function getNewName(){
+    var response = JSON.parse(this.responseText);
+    var name = document.getElementById('person14Name');
+    name.innerHTML = response.name;
   }
    function findNewName(id){
     oReq3.addEventListener('load', getNewName);
@@ -50,17 +49,16 @@
 
   var oReq4 = new XMLHttpRequest();
 
-    function getSpecies(){
-      var response = JSON.parse(this.responseText);
-
-      var name = document.getElementById('person14Species');
-      name.innerHTML = response.name;
-   }
-     function findSpecies(id){
-      oReq4.addEventListener('load', getSpecies);
-      oReq4.open('GET', `http://swapi.co/api/species/${id}`);
-      oReq4.send();
-   }
+  function getSpecies(){
+    var response = JSON.parse(this.responseText);
+    var name = document.getElementById('person14Species');
+    name.innerHTML = response.name;
+  }
+  function findSpecies(id){
+    oReq4.addEventListener('load', getSpecies);
+    oReq4.open('GET', `http://swapi.co/api/species/${id}`);
+    oReq4.send();
+  }
 
    //boilerplate function to grab data
    function getData(method, url, callback){
@@ -68,9 +66,9 @@
     xhr.addEventListener('load', callback);
     xhr.open(method, url);
     xhr.send();
-    }
+  }
 
-
+  var titleDisplay = document.getElementById('filmList');
 
   function getTitles(){
     var films = JSON.parse(this.responseText);
@@ -82,64 +80,42 @@
       //console.log('*** this is the urls = ', films.results[i].planets);
       //console.log('*** this is the array of planets = ',arrayOfPlanets);
 
-      var titleDisplay = document.getElementById('filmList');
       var filmTitle = document.createElement('h2');
       filmTitle.classname = 'filmTitle';
       filmTitle.innerHTML = films.results[i].title;
       titleDisplay.appendChild(filmTitle);
 
+      var planetName = document.createElement('ul');
+      planetName.className = "planetName";
+      titleDisplay.appendChild(planetName);
+
       var arrayOfPlanets = films.results[i].planets;
-        for (var j = 0; j <arrayOfPlanets.length; j++){
-          //console.log('*** this is arrayOfPlanets @ j = ', arrayOfPlanets[j]);
-          getData('GET', arrayOfPlanets[j], getPlanets);
+      for (var j = 0; j <arrayOfPlanets.length; j++){
+        //console.log('*** this is arrayOfPlanets @ j = ', arrayOfPlanets[j]);
+        //lock in planet name
+        var planetListItem = document.createElement('li');
+        planetName.appendChild(planetListItem);
+
+        (function(myPlanetListItem){
+          getData('GET', arrayOfPlanets[j], function(){
+          var planets = JSON.parse(this.responseText);
+          //console.log(planets);
+          console.log('*** planet names = ', planets.name);
+          var planetLists = document.createElement('h4');
+          planetLists.className = 'planets';
+          planetLists.innerHTML = planets.name;
+          myPlanetListItem.appendChild(planetLists);
+        });
+       })(planetListItem);
       }
     }
   }
-
-  function getPlanets(){
-    var planets = JSON.parse(this.responseText);
-    //console.log(planets);
-    console.log('*** planet names = ', planets.name);
-
-    var planetDisplay = document.getElementsByClassName('filmTitle');
-    var planetName = document.createElement('div');
-    planetName.classname = 'planetName';
-    planetName.innerHTML = planets.name;
-    planetDisplay.appendChild(planetName);
-  }
-
-
 
   findName(4);
   findSpecies(1);
   findNewName(14);
   findPlanet(1);
-  getData('GET', 'http://swapi.co/api/films', getTitles);
+  getData('GET', 'http://swapi.co/api/films', getTitles); //this gets the titles and the planets
 
 })();
-
-
-/*function xhr(method, url, callback) {
-  var request = new XMLHttpRequest();
-  request.addEventListener('load', callback);
-  request.open(method, url)
-  request.send()
-}
-
-
-xhr('GET', 'http://swapi.co/api/films', getFilms)
-
-function getFilms() {
-  var films = this.responseText;
-  for (var i = 0; i < films.length) {
-    xhr('GET', 'aosfdhpasiodfhaf${films.whatever}', getIndividualFilm)
-  }
-}
-
-
-getIndividualFilm() {
-  indivdiual film = this.responseText
-}
-
-*/
 
