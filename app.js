@@ -93,33 +93,41 @@
 
 
    function getData(method, url, callback){
-      var xhr = new XMLHttpRequest();
-      xhr.addEventListener('load', getTitles );
-      xhr.open(method, url, callback);
-      xhr.send();
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', callback);
+    xhr.open(method, url);
+    xhr.send();
     }
-    getData('GET', 'http://swapi.co/api/films', getTitles);
 
-
-    function getTitles(){
-     var films = JSON.parse(this.responseText);
-     console.log('*** all the films =  ',films);
-     console.log('*** all the film objects =  ',films.results);
-     console.log('*** Object title @ 0 =  ',films.results[0].title);
-     for (i = 0; i < films.results.length; i++){
+  function getTitles(){
+    var films = JSON.parse(this.responseText);
+    //console.log('*** all the films =  ',films);
+    //console.log('*** all the film objects =  ',films.results);
+    //console.log('*** Object title @ 0 =  ',films.results[0].title);
+    for (i = 0; i < films.results.length; i++){
       console.log('*** this is the title =  ', films.results[i].title);
+      //console.log('*** this is the urls = ', films.results[i].planets);
+      var arrayOfPlanets = films.results[i].planets;
+      //console.log('*** this is the array of planets = ',arrayOfPlanets);
+        for (var j = 0; j <arrayOfPlanets.length; j++){
+          //console.log('*** this is arrayOfPlanets @ j = ', arrayOfPlanets[j]);
+          getData('GET', arrayOfPlanets[j], getPlanets);
+        }
 
-     }
-    }
+   }
+  }
+
+  function getPlanets(){
+    var planets = JSON.parse(this.responseText);
+    //console.log(planets);
+    console.log(planets.name);
+  }
 
 
 
 
 
-
-
-
-
+  getData('GET', 'http://swapi.co/api/films', getTitles);
   })();
 
 
